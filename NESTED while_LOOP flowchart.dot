@@ -1,0 +1,45 @@
+digraph G {
+    splines="ortho";
+    /* Entities */
+    Start[label="Start", shape="circle"]
+    int1[label="i=1", shape="square"]
+    wh1[label="while i<=3", shape="diamond"]
+    print1[
+        label="print(i,'Outer loop is \nexecuted only once')"
+        shape="parallelogram"
+        ]
+    int2[label= "j=1", shape="square"]
+    wh2[label="while j<=3", shape="diamond"]
+    print2[
+        label="print(j,'Inner loop is \nexecuted until to completion')", 
+        shape= "parallelogram"
+        width=0.5
+    ]
+    inc1[label = "j += 1", shape="rectangle"]
+    inc2[label = "i += 1", shape="rectangle"]
+    End[label="End", shape="circle"]
+
+    /* Relationships */
+    Start -> int1
+    int1 -> wh1[color="red"]
+
+    /*Loop1*/
+    wh1 -> print1[color="red" label="True"]
+    print1 -> int2 [color="red"]
+    int2 -> wh2[color="red"]
+    wh2:w-> inc2[color="red" label="False"]
+    inc2->int1[ constraint="False" color="red" label="New i" ]
+
+    /*Loop2*/
+    wh2 -> print2[color="blue" label="True"]
+    print2 -> inc1[ color="blue"]
+    inc1-> wh2[color="blue" label="new j"]
+
+    wh1 -> End[label="False"]
+    
+    /* Ranks */
+    {rank=same; int1, wh1 }
+    {rank=same; int2 print1 inc2};
+    {rank=same; print2 inc1}
+    {rank=max; End}
+}
